@@ -66,27 +66,13 @@ public class MatrixConstruction {
 
 	}
 
-	/**
-	 * Create an empty 2d array of integers of the size needed for a QR code of the
-	 * given version
-	 * 
-	 * @param version
-	 *            the version number of the qr code (has to be between 1 and 4
-	 *            included
-	 * @return an empty matrix
-	 */
+
 	public static int[][] initializeMatrix(int version) {
 		int size =  QRCodeInfos.getMatrixSize(version);
 		int[][] matrix = new int [size][size];
 		return matrix;
 	}
 
-	/**
-	 * Add all finder patterns to the given matrix with a border of White modules.
-	 * 
-	 * @param matrix
-	 *            the 2D array to modify: where to add the patterns
-	 */
 	public static void addFinderPatterns(int[][] matrix) {
 		placePattern(0,0,matrix);
 		drawLine(7,0,false,matrix);
@@ -146,12 +132,6 @@ public class MatrixConstruction {
 		}
 	}
 
-	/**
-	 * Add the timings patterns
-	 * 
-	 * @param matrix
-	 *            The 2D array to modify
-	 */
 	public static void addTimingPatterns(int[][] matrix) {
 		boolean  switcher = true; 
 		// Create horizontal timing pattern 
@@ -175,19 +155,18 @@ public class MatrixConstruction {
 
 	
 	public static void addFormatInformation(int[][] matrix, int mask) {
-		// TODO Implementer
 		boolean[]  fs = QRCodeInfos.getFormatSequence(mask); 
-       int j =0 ; 
-       int ml= matrix.length;
+		int j =0 ; 
+		int ml= matrix.length;
 		// horizontal Format Information
 		for(int i =0 ; i<ml ; ++i) {
 			if(i==6) {
-				continue; 
+				continue; //Ommit this pixel 
 			}else if(i==8 ){
-			 i=ml-9;	
+				i=ml-9;	
 			}else {
-			matrix[i][8] = fs[j] ? B : W ;
-			++j;
+				matrix[i][8] = fs[j] ? B : W ;
+				++j;
 			}
 		}
 		
@@ -197,7 +176,7 @@ public class MatrixConstruction {
 			if( i==ml-8){
 				i=9;
 			}else if(i==6) {
-			    continue; 
+			    continue; //Ommit this pixel
 		    }
 			else{
 				matrix[8][i] = fs[j] ? B : W ;
@@ -205,7 +184,7 @@ public class MatrixConstruction {
 			}
 			
 			}
-		}
+	}
 		
 
 	
