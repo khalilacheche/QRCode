@@ -1,20 +1,10 @@
 package qrcode;
 
 public class MatrixConstruction {
+	public static final int W = 0xFF_00_00_FF;
+	public static final int B = 0xFF_00_00_00;
 
-	/*
-	 * Constants defining the color in ARGB format
-	 * 
-	 * W = White integer for ARGB
-	 * 
-	 * B = Black integer for ARGB
-	 * 
-	 * both needs to have their alpha component to 255
-	 */
-	// TODO add constant for White pixel
-	// TODO add constant for Black pixel
 	
-
 	// ...  MYDEBUGCOLOR = ...;
 	// feel free to add your own colors for debugging purposes
 
@@ -66,8 +56,8 @@ public class MatrixConstruction {
 	 *         initialized. The modules where the data should be remain empty.
 	 */
 	public static int[][] constructMatrix(int version, int mask) {
-		// TODO Implementer
-		return null;
+		int [][] matrix = initializeMatrix(version);
+		return matrix;
 
 	}
 
@@ -81,8 +71,9 @@ public class MatrixConstruction {
 	 * @return an empty matrix
 	 */
 	public static int[][] initializeMatrix(int version) {
-		// TODO Implementer
-		return null;
+		int size =  QRCodeInfos.getMatrixSize(version);
+		int[][] matrix = new int [size][size];
+		return matrix;
 	}
 
 	/**
@@ -94,6 +85,22 @@ public class MatrixConstruction {
 	public static void addFinderPatterns(int[][] matrix) {
 		// TODO Implementer
 	}
+	
+	private void placeSquareAt(int[] startingPoint,int size, int color, int[][] matrix) {
+		for(int x=startingPoint[0];x<startingPoint[0]+size;++x) {
+			for(int y =startingPoint[1];y<startingPoint[1]+size;++y) {
+				if(y==startingPoint[1]||y==startingPoint[1]+size-1) {
+					matrix[x][y]=color;
+				}else {
+					if(x==startingPoint[0]||x==startingPoint[0]-1) {
+					matrix[x][y]=color;
+					}
+				}
+			}
+		}
+	
+	}
+	
 
 	/**
 	 * Add the alignment pattern if needed, does nothing for version 1
