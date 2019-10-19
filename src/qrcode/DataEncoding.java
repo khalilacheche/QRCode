@@ -54,14 +54,14 @@ public final class DataEncoding {
 		//TODO: Check if final length <size
 		
 		int[] output = new int[finalLength];
-		boolean foo=true; //Variable to switch back and forth between 236 and 17
+		boolean switcher=true; //Variable to switch back and forth between 236 and 17
 		
 		for(int i=0;i<finalLength;++i) {
 			if(i<encodedData.length) {
 				output[i]=encodedData[i];
 			}else {
-				output[i]= foo? 236 : 17;
-				foo=!foo;
+				output[i]= switcher? 236 : 17;
+				switcher=!switcher;
 			}
 		}
 		
@@ -87,12 +87,14 @@ public final class DataEncoding {
 		boolean[] output = new boolean[data.length*8];
 		for(int i=0;i<data.length;++i) {
 			int in = data[i];
-			for(int j=7;j>-1;--j) {
-					if(in>=Math.pow(2, j)) {
-						output[8*i+7-j]=true;
-						in-=Math.pow(2, j);
-					}else {
+			for(int j=0;j<8;++j) {
+					if(in%2==0) {
 						output[8*i+7-j]=false;
+						in= (in/2);
+					}else {
+						output[8*i+7-j]=true;
+						in=(in/2);
+
 					}
 			}
 		}
