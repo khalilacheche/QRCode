@@ -59,6 +59,9 @@ public class MatrixConstruction {
 		int [][] matrix = initializeMatrix(version);
 		addFinderPatterns(matrix);
 		addAlignmentPatterns(matrix,version);
+		addTimingPatterns(matrix); 
+		addDarkModule(matrix); 
+		addFormatInformation(matrix,mask); 
 		return matrix;
 
 	}
@@ -121,7 +124,7 @@ public class MatrixConstruction {
 			}	
 		}
 	}
-	private static void placeSquareAt(int xStart,int yStart,int size, int color, int[][] matrix) {
+	private static void placeSquareAt(int xStart,int yStart,int size, int color, int[][] matrix) { 
 		for(int x=xStart;x<xStart+size;++x) {
 			for(int y =yStart;y<yStart+size;++y) {
 				if(y==yStart||y==yStart+size-1) {
@@ -142,7 +145,7 @@ public class MatrixConstruction {
 		int pos = matrix.length-7;
 		boolean colorSwitch=true;
 		for(int i=0;i<3;++i) {
-			placeSquareAt(pos+i,pos+i, 5-2*i, colorSwitch ? B:W,matrix);
+			placeSquareAt(pos+i-2,pos+i-2, 5-2*i, colorSwitch ? B:W,matrix);
 			colorSwitch=!colorSwitch;
 		}
 	}
@@ -155,6 +158,19 @@ public class MatrixConstruction {
 	 */
 	public static void addTimingPatterns(int[][] matrix) {
 		// TODO Implementer
+		boolean  switcher = true; 
+		// Create horizontal timing pattern 
+		for(int i=8;i<matrix.length-8;++i) {
+			matrix[i][6]= (switcher) ? B : W ; 
+			switcher = !switcher; 	
+		}
+		switcher = true; 
+		// Create Vertical timing pattern 
+		for(int i=8 ; i<matrix[6].length-8; ++i) {
+			matrix[6][i]=  (switcher) ? B : W ;
+			switcher = !switcher; 	
+
+		}
 	}
 
 	/**
@@ -165,6 +181,7 @@ public class MatrixConstruction {
 	 */
 	public static void addDarkModule(int[][] matrix) {
 		// TODO Implementer
+		matrix[8][matrix[8].length-8] = 0xFF_00_00_00 ;
 	}
 
 	/**
@@ -177,8 +194,29 @@ public class MatrixConstruction {
 	 */
 	public static void addFormatInformation(int[][] matrix, int mask) {
 		// TODO Implementer
-	}
+		boolean[]  fs = QRCodeInfos.getFormatSequence(mask); 
+       int j =0 ; 
+		// horizontal Format Information
+		for(int i =0 ; i<matrix.length ; ++i) {
+			if(i==6 || (i>=8 && i <matrix.length-8)) {
+				continue; 
+			}else {
+			matrix[i][8] = fs[j] ? B : W ;
+			++j;
+			}
+		}
+		
+		j=0;
+		// Vertical Format Information
+		for (int i = matrix[8].length-1;i>=0;--i) {
+			if((i<=8 || i>matrix[8].length-8) && (i!=6)) {
+			matrix[8][i] = fs[j] ? B : W ;
+			++j;
+			}else {continue;}
+		}
+		
 
+	}
 	/*
 	 * =======================================================================
 	 * ****************************** PART 3 *********************************
