@@ -43,7 +43,7 @@ public final class DataEncoding {
 			output[i] = msb|lsb;//Combining the msb and lsb
 		}
 		
-		output[output.length-1]=(inputBytes[output.length-2]& 0xF)<<4;//Last byte with terminaison sequence
+		output[output.length-1]=(inputBytes[inputBytes.length-1]& 0xF)<<4;//Last byte with terminaison sequence
 		
 		return output;
 	}
