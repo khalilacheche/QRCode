@@ -1,7 +1,7 @@
 package qrcode;
 
 public class MatrixConstruction {
-	public static final int W = 0xFF_00_00_FF;
+	public static final int W = 0xFF_FF_FF_FF;
 	public static final int B = 0xFF_00_00_00;
 
 	
@@ -57,6 +57,8 @@ public class MatrixConstruction {
 	 */
 	public static int[][] constructMatrix(int version, int mask) {
 		int [][] matrix = initializeMatrix(version);
+		addFinderPatterns(matrix);
+		addAlignmentPatterns(matrix,version);
 		return matrix;
 
 	}
@@ -83,17 +85,50 @@ public class MatrixConstruction {
 	 *            the 2D array to modify: where to add the patterns
 	 */
 	public static void addFinderPatterns(int[][] matrix) {
-		// TODO Implementer
+		placePattern(0,0,matrix);
+		drawLine(7,0,false,matrix);
+		drawLine(0,7,true,matrix);
+		
+		placePattern(0,matrix.length-7,matrix);
+		drawLine(matrix.length-8,0,false,matrix);
+		drawLine(matrix.length-8,7,true,matrix);
+		
+		placePattern(matrix.length-7,0,matrix);
+		drawLine(7,matrix.length-8,false,matrix);
+		drawLine(0,matrix.length-8,true,matrix);
+		
 	}
 	
-	private void placeSquareAt(int[] startingPoint,int size, int color, int[][] matrix) {
-		for(int x=startingPoint[0];x<startingPoint[0]+size;++x) {
-			for(int y =startingPoint[1];y<startingPoint[1]+size;++y) {
-				if(y==startingPoint[1]||y==startingPoint[1]+size-1) {
+	private static void placePattern(int xStart,int yStart,int [][]matrix) {
+		boolean colorSwitch=false;
+		
+		for(int i=0;i<4;++i) {
+			if(i!=3)
+				colorSwitch=!colorSwitch;
+			placeSquareAt(xStart+i,yStart+i,7-2*i,colorSwitch?B:W,matrix);
+		}
+		
+	}
+	private static void drawLine(int xStart,int yStart,boolean isHorizental,int[][]matrix) {
+		
+		if(isHorizental) {			
+			for(int x=xStart;x<xStart+8;++x){
+				matrix[x][yStart]=W;
+			}	
+		}else {
+			for(int y=yStart;y<yStart+8;++y){
+				matrix[xStart][y]=W;
+			}	
+		}
+	}
+	private static void placeSquareAt(int xStart,int yStart,int size, int color, int[][] matrix) {
+		for(int x=xStart;x<xStart+size;++x) {
+			for(int y =yStart;y<yStart+size;++y) {
+				if(y==yStart||y==yStart+size-1) {
 					matrix[x][y]=color;
 				}else {
-					if(x==startingPoint[0]||x==startingPoint[0]-1) {
-					matrix[x][y]=color;
+					if(x==xStart||x==(xStart+size-1)) {
+						matrix[x][y]=color;
 					}
 				}
 			}
@@ -101,18 +136,15 @@ public class MatrixConstruction {
 	
 	}
 	
-
-	/**
-	 * Add the alignment pattern if needed, does nothing for version 1
-	 * 
-	 * @param matrix
-	 *            The 2D array to modify
-	 * @param version
-	 *            the version number of the QR code needs to be between 1 and 4
-	 *            included
-	 */
 	public static void addAlignmentPatterns(int[][] matrix, int version) {
-		// TODO Implementer
+		if(version==1)
+			return;
+		int pos = matrix.length-7;
+		boolean colorSwitch=true;
+		for(int i=0;i<3;++i) {
+			placeSquareAt(pos+i,pos+i, 5-2*i, colorSwitch ? B:W,matrix);
+			colorSwitch=!colorSwitch;
+		}
 	}
 
 	/**
