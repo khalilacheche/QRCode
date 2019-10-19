@@ -105,16 +105,16 @@ public class MatrixConstruction {
 	private static void placePattern(int xStart,int yStart,int [][]matrix) {
 		boolean colorSwitch=false;
 		
-		for(int i=0;i<4;++i) {
+		for(int i=0;i<4;++i) { // Draw squares from the biggest to the smallest with alternating colors
 			if(i!=3)
 				colorSwitch=!colorSwitch;
-			placeSquareAt(xStart+i,yStart+i,7-2*i,colorSwitch?B:W,matrix);
+			placeSquareAt(xStart+i,yStart+i,7-2*i,colorSwitch?B:W,matrix);   
 		}
 		
 	}
-	private static void drawLine(int xStart,int yStart,boolean isHorizental,int[][]matrix) {
+	private static void drawLine(int xStart,int yStart,boolean isHorizontal,int[][]matrix) {//Draw vertical or horizontal white line 
 		
-		if(isHorizental) {			
+		if(isHorizontal) {			
 			for(int x=xStart;x<xStart+8;++x){
 				matrix[x][yStart]=W;
 			}	
@@ -124,16 +124,12 @@ public class MatrixConstruction {
 			}	
 		}
 	}
-	private static void placeSquareAt(int xStart,int yStart,int size, int color, int[][] matrix) { 
-		for(int x=xStart;x<xStart+size;++x) {
+	private static void placeSquareAt(int xStart,int yStart,int size, int color, int[][] matrix) {// draw empty square (size*size) with border "color" 
+		for(int x=xStart;x<xStart+size;++x) {                                                     //   and top left corner with coordinates(xStart,yStart)
 			for(int y =yStart;y<yStart+size;++y) {
-				if(y==yStart||y==yStart+size-1) {
+				if(y==yStart||y==yStart+size-1|| x==xStart||x==(xStart+size-1)) {
 					matrix[x][y]=color;
-				}else {
-					if(x==xStart||x==(xStart+size-1)) {
-						matrix[x][y]=color;
-					}
-				}
+				}                                                      
 			}
 		}
 	
@@ -144,8 +140,8 @@ public class MatrixConstruction {
 			return;
 		int pos = matrix.length-7;
 		boolean colorSwitch=true;
-		for(int i=0;i<3;++i) {
-			placeSquareAt(pos+i-2,pos+i-2, 5-2*i, colorSwitch ? B:W,matrix);
+		for(int i=0;i<3;++i) {  // Draw squares from the biggest to the smallest with alternating colors
+			placeSquareAt(pos+i-2,pos+i-2, 5-2*i, colorSwitch ? B:W,matrix);    
 			colorSwitch=!colorSwitch;
 		}
 	}
@@ -157,7 +153,6 @@ public class MatrixConstruction {
 	 *            The 2D array to modify
 	 */
 	public static void addTimingPatterns(int[][] matrix) {
-		// TODO Implementer
 		boolean  switcher = true; 
 		// Create horizontal timing pattern 
 		for(int i=8;i<matrix.length-8;++i) {
@@ -166,40 +161,30 @@ public class MatrixConstruction {
 		}
 		switcher = true; 
 		// Create Vertical timing pattern 
-		for(int i=8 ; i<matrix[6].length-8; ++i) {
+		for(int i=8 ; i<matrix.length-8; ++i) {
 			matrix[6][i]=  (switcher) ? B : W ;
 			switcher = !switcher; 	
 
 		}
 	}
 
-	/**
-	 * Add the dark module to the matrix
-	 * 
-	 * @param matrix
-	 *            the 2-dimensional array representing the QR code
-	 */
+	
 	public static void addDarkModule(int[][] matrix) {
-		// TODO Implementer
-		matrix[8][matrix[8].length-8] = 0xFF_00_00_00 ;
+		matrix[8][matrix.length-8] = B ;
 	}
 
-	/**
-	 * Add the format information to the matrix
-	 * 
-	 * @param matrix
-	 *            the 2-dimensional array representing the QR code to modify
-	 * @param mask
-	 *            the mask id
-	 */
+	
 	public static void addFormatInformation(int[][] matrix, int mask) {
 		// TODO Implementer
 		boolean[]  fs = QRCodeInfos.getFormatSequence(mask); 
        int j =0 ; 
+       int ml= matrix.length;
 		// horizontal Format Information
-		for(int i =0 ; i<matrix.length ; ++i) {
-			if(i==6 || (i>=8 && i <matrix.length-8)) {
+		for(int i =0 ; i<ml ; ++i) {
+			if(i==6) {
 				continue; 
+			}else if(i==8 ){
+			 i=ml-9;	
 			}else {
 			matrix[i][8] = fs[j] ? B : W ;
 			++j;
@@ -208,15 +193,22 @@ public class MatrixConstruction {
 		
 		j=0;
 		// Vertical Format Information
-		for (int i = matrix[8].length-1;i>=0;--i) {
-			if((i<=8 || i>matrix[8].length-8) && (i!=6)) {
-			matrix[8][i] = fs[j] ? B : W ;
-			++j;
-			}else {continue;}
+		for (int i = ml-1;i>=0;--i) {
+			if( i==ml-8){
+				i=9;
+			}else if(i==6) {
+			    continue; 
+		    }
+			else{
+				matrix[8][i] = fs[j] ? B : W ;
+				++j;
+			}
+			
+			}
 		}
 		
 
-	}
+	
 	/*
 	 * =======================================================================
 	 * ****************************** PART 3 *********************************
