@@ -31,7 +31,7 @@ public class Debug {
 		
 		//test2.testAddDataInformationOnEmptyMat();
 		
-		//test2.testAddDataInformationWithNoData();
+		test2.testAddDataInformationWithNoData();
 		
 		//test2.testAddDataInformation();
 		

@@ -257,19 +257,73 @@ public class MatrixConstruction {
 		return dataBit ? B : W ;
 	}
 
-	/**
-	 * Add the data bits into the QR code matrix
-	 * 
-	 * @param matrix
-	 *            a 2-dimensionnal array where the bits needs to be added
-	 * @param data
-	 *            the data to add
-	 */
+	
 	public static void addDataInformation(int[][] matrix, boolean[] data, int mask) {
-		// TODO Implementer
-
+		
+		int ml = matrix.length;
+		int direction=-1;
+		int counter=0;
+		if(data.length==0) {
+			
+			for(int x=0;x<ml;++x) {
+				for(int y=0;y<ml;++y) {
+					if(matrix[x][y]==0) {
+						matrix[x][y]=maskColor(x,y,false,mask);
+					}
+					
+				}
+			}
+			return;
+		}
+			
+		for(int x= ml-1 ; x>=0; x=x-2) {
+			if(x==6) {
+				x--;
+			}
+			for(int y = getEndPositions(x,ml)[0]; y*direction <= direction*getEndPositions(x,ml)[1]; y+=direction) {
+				for(int i=0;i<2;++i) {
+					if(matrix[x-i][y]==0) {
+						if(counter<data.length) {
+							matrix[x-i][y]=maskColor(x-i,y,data[counter],mask);
+							++counter;
+							
+						}else {
+							matrix[x-i][y]=maskColor(x-i,y,false,mask);
+						}
+					}
+				}
+			}
+			direction*=-1;
+				
+		}
+	
 	}
 
+	public static int[] getEndPositions(int row, int length) {
+		boolean isTop = true;
+		if(row>6) {
+			isTop=row % 4!=0;
+		}else {
+			isTop=row==5||row==1;
+		}
+		int[] y=new int[2];
+		if(!isTop){
+			y[0]=length-1;
+			y[1]=0;
+			
+		}else {
+			y[1]=length-1;
+			y[0]=0;
+		}
+		
+		return y;
+	}
+	
+	
+	
+	
+	
+	
 	/*
 	 * =======================================================================
 	 * 
