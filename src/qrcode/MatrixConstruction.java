@@ -98,6 +98,7 @@ public class MatrixConstruction {
 		}
 		
 	}
+	
 	private static void drawLine(int xStart,int yStart,boolean isHorizontal,int[][]matrix) {//Draw vertical or horizontal white line 
 		
 		if(isHorizontal) {			
@@ -206,8 +207,54 @@ public class MatrixConstruction {
 	 * @return the color with the masking
 	 */
 	public static int maskColor(int col, int row, boolean dataBit, int masking) {
-		// TODO Implementer
-		return 0;
+		
+		switch(masking) {
+			case 0:
+				if((col + row) % 2 == 0)
+					dataBit=!dataBit;
+				break;
+			case 1:
+				if(row % 2 == 0)
+					dataBit=!dataBit;
+				
+				break;
+			case 2:
+				if(col % 3 == 0)
+					dataBit=!dataBit;
+				
+				break;
+			case 3:
+				if((col + row) % 3 == 0)
+					dataBit=!dataBit;
+				
+				break;
+			case 4:
+				if((col/3 + row/2) % 2 == 0)
+					dataBit=!dataBit;
+				
+				break;
+			case 5:
+				if(((col * row) % 2) +((col * row) % 3) == 0)
+					dataBit=!dataBit;
+				
+				break;
+			case 6:
+				if((((col * row) % 2) +((col * row) % 3)) % 2 == 0)
+					dataBit=!dataBit;
+				
+				break;
+			case 7:
+				if((((col + row) % 2) +((col * row) % 3)) % 2 == 0)
+					dataBit=!dataBit;
+				
+				break;
+			default:
+				break;
+
+		
+		}
+		
+		return dataBit ? B : W ;
 	}
 
 	/**
