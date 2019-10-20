@@ -2,7 +2,7 @@ package qrcode;
 
 public class Main {
 
-	public static final String INPUT =  "Write you message here. Accents are permitted, but not all characters. See the norm ISO/CEI 8859-1 on wikipedia for more info";
+	public static final String INPUT =  "https://ikn.to/c/CAAQARoQibBoLJ_o5JwFpgBFyotH6CIUzzcLbXwE9X95Z2i4xQK8Ordr6Wk";
 
 	/*
 	 * Parameters
