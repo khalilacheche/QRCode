@@ -367,8 +367,16 @@ public class MatrixConstruction {
 	 * @return the mask number that minimize the penalty
 	 */
 	public static int findBestMasking(int version, boolean[] data) {
-		// TODO BONUS
-		return 0;
+		int lowestEvaluation=evaluate(renderQRCodeMatrix(version,data,0));
+		int bestMasking=0;
+		for(int i=1;i<8;++i) {
+			System.out.println(evaluate(renderQRCodeMatrix(version,data,i)));
+			if(evaluate(renderQRCodeMatrix(version,data,i)) < lowestEvaluation) {
+				lowestEvaluation = evaluate(renderQRCodeMatrix(version,data,i));
+				bestMasking=i;
+			}
+		}
+		return bestMasking;
 	}
 
 	/**
@@ -379,9 +387,132 @@ public class MatrixConstruction {
 	 * @return the penalty score obtained by the QR code, lower the better
 	 */
 	public static int evaluate(int[][] matrix) {
-		//TODO BONUS
+		int ml= matrix.length;
+		int consecutive=0;
+		int penalties=0;
+		
+		int[] sequence1 = {W, W, W, W, B, W, B, B, B, W, B};
+		int[] sequence2 = {B, W, B, B, B, W, B, W, W, W, W};
+		
+		int blackModules=0;
+		
+		
+		//Checking for consecutives on the columns
+		for(int x=0;x<ml;++x) {
+			for(int y=1;y<ml;++y) {
+				
+				if(matrix[x][y]==matrix[x][y-1]) {
+					++consecutive;
+				}else {
+					if(consecutive>=5)
+						penalties+= consecutive;
+					consecutive = 0;
+				}
+			}
+		}
+		consecutive=0;
+		
+		//Checking for consecutives on the rows
+		
+		for(int y=0;y<ml;++y) {
+			for(int x=1;x<ml;++x) {
+				if(matrix[x][y]==matrix[x-1][y]) {
+					++consecutive;
+				}else {
+					if(consecutive>=5)
+						penalties+= consecutive;
+					consecutive = 0;
+				}
+			}
+		}
+		
+		
+		for(int x=0; x<ml-1;++x) {
+			for(int y=0; y<ml-1;++y) {
+				if(  (matrix[x][y]==matrix[x+1][y]) && (matrix[x][y]==matrix[x][y+1]) && (matrix[x][y]==matrix[x+1][y+1]) ) {
+					penalties +=3;
+				}
+			}
+		}
+		
+		
+		int[][] newMatrix = new int[ml+1][ml+1];
+		
+		for(int x=0;x<ml+1;++x) {
+			for(int y=0;y<ml+1;++y) {
+				if(x==0||y==0||x==ml||y==ml) {
+					newMatrix[x][y]=W;
+				}else{
+					if(matrix[x-1][y-1]==B)
+							++blackModules;
+					newMatrix[x][y]=matrix[x-1][y-1];
+				}
+			}
+		}
+		
+		
+		for(int x=0; x<ml+1;++x) {
+			for(int y=0; y<ml+1-sequence1.length;++y) {
+				if(newMatrix[x][y]==W) {
+					for(int i=0;i<sequence1.length;++i) {
+						if(newMatrix[x][y+i+1]!=sequence1[i]) 
+							break;
+						if(i==sequence1.length-1)
+							penalties+=40;
+					}
+					
+					
+				}else {
+					for(int i=0;i<sequence2.length;++i) {
+						if(newMatrix[x][y+i+1]!=sequence2[i]) 
+							break;
+						if(i==sequence2.length-1)
+							penalties+=40;
+					}
+				}
+			}
+		}
+		
+		
+		for(int y=0; y<ml+1;++y) {
+			for(int x=0; x<ml+1-sequence1.length;++x) {
+				
+				if(newMatrix[x][y]==W) {
+					for(int i=0;i<sequence1.length;++i) {
+						if(newMatrix[x+i+1][y]!=sequence1[i]) 
+							break;
+						if(i==sequence1.length-1)
+							penalties+=40;
+					}
+					
+					
+				}else {
+					for(int i=0;i<sequence2.length;++i) {
+						if(newMatrix[x+i+1][y]!=sequence2[i]) 
+							break;
+						if(i==sequence2.length-1)
+							penalties+=40;
+					}
+				}
+			}
+		}
+		
+		
+		
+		int percentage = blackModules*100/(ml*ml);
+		
+		int firstPercentage = (percentage/5) *5;
+		int secondPercentage = firstPercentage +5;
+		
+		firstPercentage = Math.abs(firstPercentage-50);
+		secondPercentage = Math.abs(secondPercentage-50);
+		
+		penalties += firstPercentage>secondPercentage? secondPercentage*2:firstPercentage *2;
+		
+		
+		
 	
-		return 0;
+		return penalties;
 	}
 
 }

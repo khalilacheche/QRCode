@@ -2,12 +2,12 @@ package qrcode;
 
 public class Main {
 
-	public static final String INPUT =  "https://ikn.to/c/CAAQARoQibBoLJ_o5JwFpgBFyotH6CIUzzcLbXwE9X95Z2i4xQK8Ordr6Wk";
+	public static final String INPUT =  "BESTMASKING";
 
 	/*
 	 * Parameters
 	 */
-	public static final int VERSION = 4;
+	public static final int VERSION = 1;
 	public static final int MASK = 0;
 	public static final int SCALING = 20;
 
