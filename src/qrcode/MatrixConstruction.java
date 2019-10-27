@@ -368,14 +368,19 @@ public class MatrixConstruction {
 	 */
 	public static int findBestMasking(int version, boolean[] data) {
 		int lowestEvaluation=evaluate(renderQRCodeMatrix(version,data,0));
+		//System.out.println(lowestEvaluation);
+		int evaluation;
 		int bestMasking=0;
 		for(int i=1;i<8;++i) {
-			System.out.println(evaluate(renderQRCodeMatrix(version,data,i)));
-			if(evaluate(renderQRCodeMatrix(version,data,i)) < lowestEvaluation) {
-				lowestEvaluation = evaluate(renderQRCodeMatrix(version,data,i));
+			System.out.println("mask "+i);
+			evaluation=evaluate(renderQRCodeMatrix(version,data,i));
+			System.out.println(evaluation);
+			if(evaluation < lowestEvaluation) {
+				lowestEvaluation = evaluation;
 				bestMasking=i;
 			}
 		}
+		System.out.println("best " + bestMasking);
 		return bestMasking;
 	}
 
@@ -396,22 +401,34 @@ public class MatrixConstruction {
 		
 		int blackModules=0;
 		
+		int numberConsecutive=0;
 		
 		//Checking for consecutives on the columns
 		for(int x=0;x<ml;++x) {
 			for(int y=1;y<ml;++y) {
-				
+					
 				if(matrix[x][y]==matrix[x][y-1]) {
 					++consecutive;
 				}else {
-					if(consecutive>=5)
-						penalties+= consecutive;
+					if(consecutive>=4) {
+						penalties+= consecutive-1;
+						numberConsecutive++;
+					}
 					consecutive = 0;
 				}
+				if(y==ml-1) {
+					if(consecutive>=4) {
+						penalties+= consecutive-1;
+						numberConsecutive++;
+					}
+					consecutive = 0;
+				}
+					
 			}
 		}
 		consecutive=0;
-		
+		//System.out.println("vertical cons "+numberConsecutive);
+		numberConsecutive=0;
 		//Checking for consecutives on the rows
 		
 		for(int y=0;y<ml;++y) {
@@ -419,14 +436,23 @@ public class MatrixConstruction {
 				if(matrix[x][y]==matrix[x-1][y]) {
 					++consecutive;
 				}else {
-					if(consecutive>=5)
-						penalties+= consecutive;
+					if(consecutive>=4) {
+						penalties+= consecutive-1;
+						numberConsecutive++;
+					}
+					consecutive = 0;
+				}
+				if(x==ml-1) {
+					if(consecutive>=4) {
+						penalties+= consecutive-1;
+						numberConsecutive++;
+					}
 					consecutive = 0;
 				}
 			}
 		}
-		
-		
+		//System.out.println("horizental cons "+numberConsecutive);
+		System.out.println("Consecutive "+ penalties);
 		for(int x=0; x<ml-1;++x) {
 			for(int y=0; y<ml-1;++y) {
 				if(  (matrix[x][y]==matrix[x+1][y]) && (matrix[x][y]==matrix[x][y+1]) && (matrix[x][y]==matrix[x+1][y+1]) ) {

@@ -2,12 +2,12 @@ package qrcode;
 
 public class Main {
 
-	public static final String INPUT =  "BESTMASKING";
+	public static final String INPUT =  "Hichem et Khalil et Salim et Yacine et Badiss et Ilyess";
 
 	/*
 	 * Parameters
 	 */
-	public static final int VERSION = 1;
+	public static final int VERSION = 4;
 	public static final int MASK = 0;
 	public static final int SCALING = 20;
 
@@ -21,7 +21,7 @@ public class Main {
 		/*
 		 * image
 		 */
-		int[][] qrCode = MatrixConstruction.renderQRCodeMatrix(VERSION, encodedData,MASK);
+		int[][] qrCode = MatrixConstruction.renderQRCodeMatrix(VERSION, encodedData);
 
 		/*
 		 * Visualization
