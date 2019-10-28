@@ -1,5 +1,7 @@
 package qrcode;
 
+import javax.swing.plaf.synth.SynthSeparatorUI;
+
 public class MatrixConstruction {
 	public static final int W = 0xFF_FF_FF_FF;
 	public static final int B = 0xFF_00_00_00;
@@ -367,14 +369,15 @@ public class MatrixConstruction {
 	 * @return the mask number that minimize the penalty
 	 */
 	public static int findBestMasking(int version, boolean[] data) {
+		System.out.println("Mask 0");
 		int lowestEvaluation=evaluate(renderQRCodeMatrix(version,data,0));
 		//System.out.println(lowestEvaluation);
 		int evaluation;
 		int bestMasking=0;
 		for(int i=1;i<8;++i) {
-			System.out.println("mask "+i);
+			System.out.println("Mask "+i);
 			evaluation=evaluate(renderQRCodeMatrix(version,data,i));
-			System.out.println(evaluation);
+			//System.out.println(evaluation);
 			if(evaluation < lowestEvaluation) {
 				lowestEvaluation = evaluation;
 				bestMasking=i;
@@ -427,8 +430,9 @@ public class MatrixConstruction {
 			}
 		}
 		consecutive=0;
-		//System.out.println("vertical cons "+numberConsecutive);
 		numberConsecutive=0;
+		
+		
 		//Checking for consecutives on the rows
 		
 		for(int y=0;y<ml;++y) {
@@ -451,8 +455,7 @@ public class MatrixConstruction {
 				}
 			}
 		}
-		//System.out.println("horizental cons "+numberConsecutive);
-		System.out.println("Consecutive "+ penalties);
+		//Checking for 2x2 Squares of same color
 		for(int x=0; x<ml-1;++x) {
 			for(int y=0; y<ml-1;++y) {
 				if(  (matrix[x][y]==matrix[x+1][y]) && (matrix[x][y]==matrix[x][y+1]) && (matrix[x][y]==matrix[x+1][y+1]) ) {
@@ -462,77 +465,77 @@ public class MatrixConstruction {
 		}
 		
 		
-		int[][] newMatrix = new int[ml+1][ml+1];
 		
-		for(int x=0;x<ml+1;++x) {
-			for(int y=0;y<ml+1;++y) {
-				if(x==0||y==0||x==ml||y==ml) {
-					newMatrix[x][y]=W;
-				}else{
-					if(matrix[x-1][y-1]==B)
-							++blackModules;
-					newMatrix[x][y]=matrix[x-1][y-1];
-				}
-			}
-		}
+		//Checking for finder-like patterns
 		
 		
-		for(int x=0; x<ml+1;++x) {
-			for(int y=0; y<ml+1-sequence1.length;++y) {
-				if(newMatrix[x][y]==W) {
+		
+			//looping through the y axis
+		for(int x=0; x<ml;++x) {
+			for(int y=0; y<ml-sequence1.length;++y) {
+				if(matrix[x][y]==W) {
 					for(int i=0;i<sequence1.length;++i) {
-						if(newMatrix[x][y+i+1]!=sequence1[i]) 
+						if(matrix[x][y+i+1]!=sequence1[i]) 
 							break;
-						if(i==sequence1.length-1)
+						if(i==sequence1.length-1) {
 							penalties+=40;
+						}
 					}
 					
 					
 				}else {
 					for(int i=0;i<sequence2.length;++i) {
-						if(newMatrix[x][y+i+1]!=sequence2[i]) 
+						if(matrix[x][y+i+1]!=sequence2[i]) 
 							break;
-						if(i==sequence2.length-1)
-							penalties+=40;
+						if(i==sequence2.length-1) {
+							penalties+=40;							
+						}
 					}
 				}
 			}
 		}
 		
-		
-		for(int y=0; y<ml+1;++y) {
-			for(int x=0; x<ml+1-sequence1.length;++x) {
+			//looping through the x axis
+		for(int y=0; y<ml;++y) {
+			for(int x=0; x<ml-sequence1.length;++x) {
 				
-				if(newMatrix[x][y]==W) {
+				if(matrix[x][y]==W) {
 					for(int i=0;i<sequence1.length;++i) {
-						if(newMatrix[x+i+1][y]!=sequence1[i]) 
+						if(matrix[x+i+1][y]!=sequence1[i]) 
 							break;
-						if(i==sequence1.length-1)
-							penalties+=40;
+						if(i==sequence1.length-1) {
+							penalties+=40;							
+						}
 					}
 					
 					
 				}else {
 					for(int i=0;i<sequence2.length;++i) {
-						if(newMatrix[x+i+1][y]!=sequence2[i]) 
+						if(matrix[x+i+1][y]!=sequence2[i]) 
 							break;
-						if(i==sequence2.length-1)
-							penalties+=40;
+						if(i==sequence2.length-1) {
+							penalties+=40;							
+						}
 					}
 				}
 			}
 		}
+
 		
 		
+		//Black modules penalty
+		for(int x=0;x<ml;++x) {
+			for(int y=0;y<ml;++y) {
+					if(matrix[x][y]==B)
+							++blackModules;
+			}
+		}
 		
 		int percentage = blackModules*100/(ml*ml);
-		
 		int firstPercentage = (percentage/5) *5;
 		int secondPercentage = firstPercentage +5;
-		
 		firstPercentage = Math.abs(firstPercentage-50);
 		secondPercentage = Math.abs(secondPercentage-50);
-		
 		penalties += firstPercentage>secondPercentage? secondPercentage*2:firstPercentage *2;
 		
 		
