@@ -371,19 +371,19 @@ public class MatrixConstruction {
 	public static int findBestMasking(int version, boolean[] data) {
 		System.out.println("Mask 0");
 		int lowestEvaluation=evaluate(renderQRCodeMatrix(version,data,0));
-		//System.out.println(lowestEvaluation);
+		System.out.println(lowestEvaluation);
 		int evaluation;
 		int bestMasking=0;
 		for(int i=1;i<8;++i) {
 			System.out.println("Mask "+i);
 			evaluation=evaluate(renderQRCodeMatrix(version,data,i));
-			//System.out.println(evaluation);
+			System.out.println(evaluation);
 			if(evaluation < lowestEvaluation) {
 				lowestEvaluation = evaluation;
 				bestMasking=i;
 			}
 		}
-		System.out.println("best " + bestMasking);
+		System.out.println("\nbest " + bestMasking);
 		return bestMasking;
 	}
 
@@ -471,23 +471,29 @@ public class MatrixConstruction {
 		
 		
 			//looping through the y axis
-		for(int x=0; x<ml;++x) {
-			for(int y=0; y<ml-sequence1.length;++y) {
+		for(int x=1; x<ml-1;++x) {
+			for(int y=0; y<ml-sequence1.length+1;++y) {
+
 				if(matrix[x][y]==W) {
-					for(int i=0;i<sequence1.length;++i) {
-						if(matrix[x][y+i+1]!=sequence1[i]) 
+					
+					for(int i=1;i<sequence1.length;++i) {
+						if(matrix[x][y+i]!=sequence1[i]) {
 							break;
+							
+						} 
 						if(i==sequence1.length-1) {
 							penalties+=40;
+							//System.out.println("W V "+x+" "+y);
 						}
 					}
 					
 					
 				}else {
-					for(int i=0;i<sequence2.length;++i) {
-						if(matrix[x][y+i+1]!=sequence2[i]) 
+					for(int i=1;i<sequence2.length;++i) {
+						if(matrix[x][y+i]!=sequence2[i]) 
 							break;
 						if(i==sequence2.length-1) {
+							//System.out.println("B V "+x+" "+y);
 							penalties+=40;							
 						}
 					}
@@ -496,24 +502,26 @@ public class MatrixConstruction {
 		}
 		
 			//looping through the x axis
-		for(int y=0; y<ml;++y) {
-			for(int x=0; x<ml-sequence1.length;++x) {
+		for(int y=1; y<ml-1;++y) {
+			for(int x=0; x<ml-sequence1.length+1;++x) {
 				
 				if(matrix[x][y]==W) {
-					for(int i=0;i<sequence1.length;++i) {
-						if(matrix[x+i+1][y]!=sequence1[i]) 
+					for(int i=1;i<sequence1.length;++i) {
+						if(matrix[x+i][y]!=sequence1[i]) 
 							break;
 						if(i==sequence1.length-1) {
+							//System.out.println("W H "+x+" "+y);
 							penalties+=40;							
 						}
 					}
 					
 					
 				}else {
-					for(int i=0;i<sequence2.length;++i) {
-						if(matrix[x+i+1][y]!=sequence2[i]) 
+					for(int i=1;i<sequence2.length;++i) {
+						if(matrix[x+i][y]!=sequence2[i]) 
 							break;
 						if(i==sequence2.length-1) {
+							//System.out.println("B H "+x+" "+y);
 							penalties+=40;							
 						}
 					}
