@@ -2,26 +2,29 @@ package qrcode;
 
 public class Main {
 
-	public static final String INPUT =  "Hê";
+	public static final String INPUT =  "sdfhjqsdhuvgverihdfhulivefuipghifb<mdfhbhieopgiheqfvihodfvbuoiergzoi^fbijoefhizerhigirhtbqhsdfhjqsdhuvgverihdfhulivefuipghifb<mdfhbhieopgiheqfvihodfvbuoiergzoi^fbijoefhizerhigirhtbqh";
 
 	/*
 	 * Parameters
 	 */
-	public static final int VERSION = 1;
+	public static final int VERSION = Extensions.getBestVersion(INPUT);
 	public static final int MASK = 0;
-	public static final int SCALING = 20;
+	public static final int SCALING = 10;
 
 	public static void main(String[] args) {
 
+		System.out.println(VERSION);
 		/*
 		 * Encoding
 		 */
+		
+		
 		boolean[] encodedData = DataEncoding.byteModeEncoding(INPUT, VERSION);
 		
 		/*
 		 * image
 		 */
-		int[][] qrCode = MatrixConstruction.renderQRCodeMatrix(VERSION, encodedData);
+		int[][] qrCode = MatrixConstruction.renderQRCodeMatrix(VERSION, encodedData,4);
 
 		/*
 		 * Visualization

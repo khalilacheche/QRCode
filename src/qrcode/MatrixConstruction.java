@@ -60,7 +60,8 @@ public class MatrixConstruction {
 	public static int[][] constructMatrix(int version, int mask) {
 		int [][] matrix = initializeMatrix(version);
 		addFinderPatterns(matrix);
-		addAlignmentPatterns(matrix,version);
+		//addAlignmentPatterns(matrix,version);
+		addAlignmentPatternsBonus(matrix,version);
 		addTimingPatterns(matrix); 
 		addDarkModule(matrix); 
 		addFormatInformation(matrix,mask); 
@@ -127,6 +128,7 @@ public class MatrixConstruction {
 	public static void addAlignmentPatterns(int[][] matrix, int version) {
 		if(version==1)
 			return;
+		
 		int pos = matrix.length-7;
 		boolean colorSwitch=true;
 		for(int i=0;i<3;++i) {  // Draw squares from the biggest to the smallest with alternating colors
@@ -134,6 +136,24 @@ public class MatrixConstruction {
 			colorSwitch=!colorSwitch;
 		}
 	}
+	
+	
+	
+	public static void addAlignmentPatternsBonus(int[][] matrix,int version) {
+		if(version==1)
+			return;
+		int[][] centers = Extensions.getAlignmentPatterns(version);
+		boolean colorSwitch=true;
+		for(int k=0;k<centers.length;++k) {
+			for(int i=0;i<3;++i) {  // Draw squares from the biggest to the smallest with alternating colors
+				placeSquareAt(centers[k][0]+i-2,centers[k][1]+i-2, 5-2*i, colorSwitch ? B:W,matrix);    
+				colorSwitch=!colorSwitch;
+			}
+			colorSwitch=true;
+			
+		}
+	}
+	
 
 	public static void addTimingPatterns(int[][] matrix) {
 		boolean  switcher = true; 

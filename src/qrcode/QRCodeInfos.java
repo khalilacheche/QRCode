@@ -5,7 +5,7 @@ public final class QRCodeInfos {
 	private static final int MATRIX_SIZE_VERSION_1 =21;
 	private static final int MATRIX_SIZE_STEP =4;
 	
-	private final static int[] VERSION_CODE_WORDS = { 19, 34, 55, 80 };
+	private final static int[] VERSION_CODE_WORDS = { 19, 34, 55, 80,108,136,156,194,252,274,324,370,428,461,523,589,647,721,795,861,932,1005,1094,1174,1275,1370,1468,1531,1631,1735,1843,1955,2071,2191,2306,2434,2566,2702,2812,2956 };
 	
 	private static final int[] LVL_CODE = {1,0,3,2};
 	
@@ -13,7 +13,7 @@ public final class QRCodeInfos {
 		L,M,Q,H
 	}
 	
-	private static final int[] ERROR_CORRECTION_CODEWORDS = {7,10,15,20};
+	private static final int[] ERROR_CORRECTION_CODEWORDS = {7,10,15,20,26,18,20,24,30,18,20,24,26,30,22,24,28,30,28,28,28,28,30,30,26,28,30,30,30,30,30,30,30,30,30,30,30,30,30,30};
 	
 	
 	
@@ -39,9 +39,9 @@ public final class QRCodeInfos {
 	 * @return the maximum number of bytes of data that can be encoded for the given version
 	 */
 	public static int getMaxInputLength(int version) {
-		if(version>4) {
+		/*if(version>4) {
 			throw new UnsupportedOperationException("The version has to be between 1 and 5");
-		}
+		}*/
 		return VERSION_CODE_WORDS[version-1] -2 ;
 	}
 	
@@ -51,9 +51,9 @@ public final class QRCodeInfos {
 	 * @return
 	 */
 	public static int getECCLength(int version) {
-		if(version>4) {
+		/*if(version>4) {
 			throw new UnsupportedOperationException("The version has to be between 1 and 5");
-		}
+		}*/
 		return ERROR_CORRECTION_CODEWORDS[version-1] ;
 	}
 	
@@ -64,9 +64,9 @@ public final class QRCodeInfos {
 	 * @return the number of codewords in the version
 	 */
 	public static int getCodeWordsLength(int version) {
-		if(version>4) {
+		/*if(version>4) {
 			throw new UnsupportedOperationException("The version has to be between 1 and 5");
-		}
+		}*/
 		return VERSION_CODE_WORDS[version-1] ;
 	}
 
