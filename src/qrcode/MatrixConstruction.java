@@ -184,7 +184,7 @@ public class MatrixConstruction {
 		// horizontal Format Information
 		for(int i =0 ; i<ml ; ++i) {
 			if(i==6) {
-				continue; //Ommit this pixel 
+				continue; //Omit this pixel 
 			}else if(i==8 ){
 				i=ml-9;	
 			}else {
@@ -288,71 +288,49 @@ public class MatrixConstruction {
 	 *            the data to add
 	 */
 	public static void addDataInformation(int[][] matrix, boolean[] data, int mask) {
-		// TODO Implementer
-		int ml=matrix.length; // matrix length
-		int y=ml-1;   // initialize line start
-		int x = ml-1;  // initialize  column start 
-		int i=0;  // data counter
-		boolean zigzag=false ; // true when we fill horizontally false when vertically 
-		boolean isAscending = true;  // true when we fill from bottom to top
-		boolean isEmpty=false;   // true if module is empty
 		
-		if (data.length==0 ) {              // fill the matrix with empty data 
-			for(int j=0 ; j<ml;++j) {
-				if(j==6) continue;   // skip the vertical timing pattern 
-				for(int k=0 ; k<ml; ++k) {
-					isEmpty = matrix[j][k] == 0;
-					matrix[j][k]= isEmpty ? maskColor(j,k,false,mask) : matrix[j][k]; 
+		int ml = matrix.length;
+		int direction=-1;
+		int counter=0;
+		if(data.length==0) {
+			
+			for(int x=0;x<ml;++x) {
+				for(int y=0;y<ml;++y) {
+					if(matrix[x][y]>>24==0) {
+						matrix[x][y]=maskColor(x,y,false,mask);
+					}
+					
 				}
 			}
+			return;
 		}
-		while(x>0) {
-			if ( x == 6 ) x=x-1 ; // skip the vertical timing pattern 
-			
-							while(y>=0 && y<=ml-1 && i<data.length) {
-								
-								if (zigzag) { // if we fill horizontally 
-
-									isEmpty = matrix[x-1][y] == 0; // checks if module is empty 
-									matrix[x-1][y] = isEmpty ?  maskColor(x-1,y,data[i],mask) : matrix[x-1][y] ; // put data mask if  empty
-									}
-								else { // if we fill vertically 
-									isEmpty = matrix[x][y] == 0;
-									matrix[x][y] = isEmpty ? maskColor(x,y,data[i],mask) : matrix[x][y] ;
-								}
-								i = isEmpty ? i+1 : i ;  // if we did not data module i stays the same 
-								
-								zigzag=!zigzag; 
-								
-								// if we fill horizontally line number stays the same else we change it according to our direction in lines 
-								y = zigzag ? y : (isAscending ? y-1 : y+1 );   
-									
-								
-							}
-							
-							
-		if (i==data.length ) {   // if there is no more data we continue to fill the rest of the matrix   
-			
-			for(int j=0 ; j<=x;++j) { // j stops at the number of column whe we ran out of data 
-				
-				if(j==6) continue; // skip vertical timing pattern 
-					for(int k=0 ; k<=ml-1; ++k) {
-						
-						isEmpty = matrix[j][k] == 0;  
-	
-						matrix[j][k]= isEmpty ? maskColor(j,k,false,mask) : matrix[j][k]; 
-					}
+		
+			boolean isTop = false; 
+		for(int x= ml-1 ; x>=0; x=x-2) {
+			if(x==6) {
+				x--;
 			}
-			break; // We break out of the loop because all of it is filled
+			for(int y = isTop ? 0 : ml-1 ; y>=0 && y<ml ; y+=direction) { //For loop that changes direction according to the -y position 
+				for(int i=0;i<2;++i) {
+					if(matrix[x-i][y]==0) {
+						if(counter<data.length) {
+							matrix[x-i][y]=maskColor(x-i,y,data[counter],mask); // fill empty module 
+							++counter;
+							
+						}else {
+							matrix[x-i][y]=maskColor(x-i,y,false,mask);
+						}
+					}
+				}
+			}
+			direction*=-1; // direction changes after each loop 
+			isTop=!isTop;	
 		}
-		
-		
-		x-=2;  // change x to fill the next to columns 
-		isAscending =!isAscending;  // change the direction of the filling
-		y = isAscending ? ml-1 : 0 ; // initialize y according to the direction
-		}
-		
-		}
+	
+	}
+
+	
+	
 	
 
 	/*

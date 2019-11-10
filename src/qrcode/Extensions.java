@@ -1,12 +1,12 @@
 package qrcode;
 
 public class Extensions {
-	public static int[][] getAlignmentPatterns(int version){
-		int length = 2+(version/7);
+	public static int[][] getAlignmentPatterns(int version){ // get AlignmnetPatterns coordinates for each version  (more informations in Readme.txt ) 
+		int length = 2+(version/7); 
 		int[] centers= new int[length];
 		int [][] result = new int [length*length-3][2];
 		centers[0]=6;
-		int difference=version%7;
+		int difference=version%7;           
 		
 		if(version<7) {
 			centers[1]= 10+ 4*version;
@@ -46,13 +46,15 @@ public class Extensions {
 		int counter=0;
 		for(int i=0;i<centers.length;++i) {
 			for(int j=0;j<centers.length;++j) {
-				if(i==0&&j==0 || i==0 &j==centers.length-1||i==centers.length-1 && j ==0) {
+				if(i==0&&j==0 || i==0 &j==centers.length-1||i==centers.length-1 && j ==0) {  // removing the coordinates that overlap the finder patterns
 				}else {
 					result[counter][0]=centers[i];
 					result[counter][1]=centers[j];
 					++counter;
 				}
-			}
+			} /* an array that contains all the possible coordinates : 
+			each element contains the x and y coordinates of the alignment pattern in the form of a 2 element array : 
+			 first element is x and second is y */
 			
 		}
 		return result;
@@ -63,7 +65,7 @@ public class Extensions {
 	
 	public static int getBestVersion(String input) {
 		for(int i=1;i<41;++i) {
-			if(QRCodeInfos.getMaxInputLength(i)>input.length()) {
+			if(QRCodeInfos.getMaxInputLength(i)>input.length()) {     // returns the best version according to the input length (the first version that contains all data but less empty modules)
 				return i;
 			}
 		}

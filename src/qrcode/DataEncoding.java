@@ -16,11 +16,15 @@ public final class DataEncoding {
 	}
 	
 	public static int[] encodeString(String input, int maxLength) {
+		
 		byte[] tabByte= input.getBytes(StandardCharsets.ISO_8859_1);
 		
-		int length = (tabByte.length < maxLength) ? tabByte.length : maxLength; //The length of the output is the length of the sequence if maxLength>sequence, else, maxLenght
+		int length = (tabByte.length < maxLength) ? tabByte.length  : maxLength; //The length of the output is the length of the sequence if maxLength>sequence, else, maxLenght
 		int[] output= new int[length];
-
+		if (tabByte.length == 0	) {
+			return new int[maxLength];    // if the input string is empty return empty array of maxLength items
+		}
+        
 		for(int i=0;i<length;++i) {
 			output[i]= tabByte[i] & 0xFF;
 		}
