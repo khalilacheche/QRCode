@@ -367,21 +367,16 @@ public class MatrixConstruction {
 	 * @return the mask number that minimize the penalty
 	 */
 	public static int findBestMasking(int version, boolean[] data) {
-		System.out.println("Mask 0");
 		int lowestEvaluation=evaluate(renderQRCodeMatrix(version,data,0));
-		System.out.println(lowestEvaluation);
 		int evaluation;
 		int bestMasking=0;
 		for(int i=1;i<8;++i) {
-			System.out.println("Mask "+i);
 			evaluation=evaluate(renderQRCodeMatrix(version,data,i));
-			System.out.println(evaluation);
 			if(evaluation < lowestEvaluation) {
 				lowestEvaluation = evaluation;
 				bestMasking=i;
 			}
 		}
-		System.out.println("\nbest " + bestMasking);
 		return bestMasking;
 	}
 
@@ -402,7 +397,6 @@ public class MatrixConstruction {
 		
 		int blackModules=0;
 		
-		int numberConsecutive=0;
 		
 		//Checking for consecutives on the columns
 		for(int x=0;x<ml;++x) {
@@ -413,14 +407,12 @@ public class MatrixConstruction {
 				}else {
 					if(consecutive>=4) {
 						penalties+= consecutive-1;
-						numberConsecutive++;
 					}
 					consecutive = 0;
 				}
 				if(y==ml-1) {
 					if(consecutive>=4) {
 						penalties+= consecutive-1;
-						numberConsecutive++;
 					}
 					consecutive = 0;
 				}
@@ -428,7 +420,6 @@ public class MatrixConstruction {
 			}
 		}
 		consecutive=0;
-		numberConsecutive=0;
 		
 		
 		//Checking for consecutives on the rows
@@ -440,14 +431,12 @@ public class MatrixConstruction {
 				}else {
 					if(consecutive>=4) {
 						penalties+= consecutive-1;
-						numberConsecutive++;
 					}
 					consecutive = 0;
 				}
 				if(x==ml-1) {
 					if(consecutive>=4) {
 						penalties+= consecutive-1;
-						numberConsecutive++;
 					}
 					consecutive = 0;
 				}
@@ -481,7 +470,6 @@ public class MatrixConstruction {
 						} 
 						if(i==sequence1.length-1) {
 							penalties+=40;
-							//System.out.println("W V "+x+" "+y);
 						}
 					}
 					
@@ -491,7 +479,6 @@ public class MatrixConstruction {
 						if(matrix[x][y+i]!=sequence2[i]) 
 							break;
 						if(i==sequence2.length-1) {
-							//System.out.println("B V "+x+" "+y);
 							penalties+=40;							
 						}
 					}
@@ -508,7 +495,6 @@ public class MatrixConstruction {
 						if(matrix[x+i][y]!=sequence1[i]) 
 							break;
 						if(i==sequence1.length-1) {
-							//System.out.println("W H "+x+" "+y);
 							penalties+=40;							
 						}
 					}
@@ -519,7 +505,6 @@ public class MatrixConstruction {
 						if(matrix[x+i][y]!=sequence2[i]) 
 							break;
 						if(i==sequence2.length-1) {
-							//System.out.println("B H "+x+" "+y);
 							penalties+=40;							
 						}
 					}

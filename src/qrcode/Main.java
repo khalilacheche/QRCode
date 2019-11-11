@@ -2,7 +2,7 @@ package qrcode;
 
 public class Main {
 
-	public static final String INPUT =  "יציצהüהüה\r\n\n\n\n\nhivhds" ;
+	public static final String INPUT =  "Mesdsafjhgasdfguasdjkfhsadjkfgadskjfgajkhsdgfvkhjasdgfadjshfgbasbdjkfgasdfakhjasdsage" ;
 			
 
 	/*
