@@ -283,7 +283,7 @@ public class MatrixConstruction {
 	 * Add the data bits into the QR code matrix
 	 * 
 	 * @param matrix
-	 *            a 2-dimensionnal array where the bits needs to be added
+	 *            a 2-dimensional array where the bits needs to be added
 	 * @param data
 	 *            the data to add
 	 */
@@ -292,11 +292,11 @@ public class MatrixConstruction {
 		int ml = matrix.length;
 		int direction=-1;
 		int counter=0;
-		if(data.length==0) {
+		if(data.length==0) { // fill with masking if data is empty
 			
 			for(int x=0;x<ml;++x) {
 				for(int y=0;y<ml;++y) {
-					if(matrix[x][y]>>24==0) {
+					if(matrix[x][y]>>24==0) { // we shift 24 bits to the right to check the alpha value
 						matrix[x][y]=maskColor(x,y,false,mask);
 					}
 					
@@ -312,7 +312,7 @@ public class MatrixConstruction {
 			}
 			for(int y = isTop ? 0 : ml-1 ; y>=0 && y<ml ; y+=direction) { //For loop that changes direction according to the -y position 
 				for(int i=0;i<2;++i) {
-					if(matrix[x-i][y]==0) {
+					if(matrix[x-i][y]>>24==0) {
 						if(counter<data.length) {
 							matrix[x-i][y]=maskColor(x-i,y,data[counter],mask); // fill empty module 
 							++counter;
