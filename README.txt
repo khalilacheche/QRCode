@@ -1,4 +1,6 @@
-﻿BONUS INFORMATION 
+A QR Code Generator, implemented for the CS-107 course
+
+BONUS INFORMATION 
 
 
 1. Find best mask:
